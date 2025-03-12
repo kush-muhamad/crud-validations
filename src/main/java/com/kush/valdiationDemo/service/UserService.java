@@ -1,6 +1,6 @@
 package com.kush.valdiationDemo.service;
 
-import com.kush.valdiationDemo.exceptions.UserNotFoundException;
+import com.kush.valdiationDemo.exceptions.NotFoundException;
 import com.kush.valdiationDemo.model.User;
 import com.kush.valdiationDemo.repo.UserRepo;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         Optional<User> user = userRepo.findById(id);
-        return user.orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        return user.orElseThrow(() -> new NotFoundException("User not found with id: " + id));
 
     }
 
@@ -40,7 +40,7 @@ public class UserService {
             updatedUser.setEmail(user.getEmail());
             return userRepo.save(updatedUser);
         } else {
-            throw new UserNotFoundException("User not found with id: " + id);
+            throw new NotFoundException("User not found with id: " + id);
         }
     }
 
@@ -49,7 +49,7 @@ public class UserService {
         if (user.isPresent()) {
             userRepo.delete(user.get());
         } else {
-            throw new UserNotFoundException("User not found with id: " + id);
+            throw new NotFoundException("User not found with id: " + id);
         }
     }
 }

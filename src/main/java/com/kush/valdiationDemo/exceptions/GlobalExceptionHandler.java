@@ -38,8 +38,8 @@ public class GlobalExceptionHandler {
     }
 
     // Handle UserNotFoundException
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(NotFoundException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("returnCode", 404); // 404 for not found
         response.put("error", ex.getMessage()); // Pass the message
