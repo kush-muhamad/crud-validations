@@ -21,6 +21,7 @@ public class User {
     @NotBlank(message = "Name is mandatory")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
+    @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
     @Column(unique = true)
     private String email;

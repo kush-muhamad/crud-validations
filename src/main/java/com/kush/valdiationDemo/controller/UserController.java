@@ -28,16 +28,16 @@ public class UserController {
     public ResponseEntity<Map<String ,Object>> getAllUsers(){
         Map<String , Object> response  = new HashMap<>();
        List<User> users = userService.getAllUsers();
-         response.put("returnObject", 200);
+         response.put("returnCode", 200);
          response.put("ReturnObject", users);
          return new ResponseEntity<>(response , HttpStatus.OK);
 
     }
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<Map<String , Object>> getUserById(@PathVariable Long id){
         Map<String , Object> response  = new HashMap<>();
         User user = userService.getUserById(id);
-        response.put("returnObject", 200);
+        response.put("returnCode", 200);
         response.put("ReturnObject", user);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
@@ -50,6 +50,24 @@ public class UserController {
         response.put("ReturnObject", newUser);
         return new ResponseEntity<>(response , HttpStatus.OK);
 
+    }
+
+    @PutMapping("/user/edit/{id}")
+    public ResponseEntity<Map<String , Object>> updateUser(@PathVariable Long id, @Valid @RequestBody User user){
+        Map<String , Object> response = new HashMap<>();
+        User updatedUser = userService.updateUser(id, user);
+        response.put("returnCode", 200);
+        response.put("ReturnObject", updatedUser);
+        return new ResponseEntity<>(response , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/delete/{id}")
+    public ResponseEntity<Map<String , Object>> deleteUser(@PathVariable Long id){
+        Map<String , Object> response = new HashMap<>();
+        userService.deleteUser(id);
+        response.put("returnCode", 200);
+        response.put("ReturnObject", "User deleted successfully");
+        return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
 }

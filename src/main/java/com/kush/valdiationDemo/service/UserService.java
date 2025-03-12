@@ -1,7 +1,9 @@
 package com.kush.valdiationDemo.service;
 
+import com.kush.valdiationDemo.exceptions.UserNotFoundException;
 import com.kush.valdiationDemo.model.User;
 import com.kush.valdiationDemo.repo.UserRepo;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +24,32 @@ public class UserService {
 
     public User getUserById(Long id) {
         Optional<User> user = userRepo.findById(id);
-        return user.orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return user.orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
 
     }
 
     public User addUser(User user) {
         return userRepo.save(user);
+    }
+
+    public User updateUser(Long id, @Valid User user) {
+        Optional<User> existingUser = userRepo.findById(id);
+        if (existingUser.isPresent()) {
+            User updatedUser = existingUser.get();
+            updatedUser.setName(user.getName());
+            updatedUser.setEmail(user.getEmail());
+            return userRepo.save(updatedUser);
+        } else {
+            throw new UserNotFoundException("User not found with id: " + id);
+        }
+    }
+
+    public void deleteUser(Long id) {
+        Optional<User> user = userRepo.findById(id);
+        if (user.isPresent()) {
+            userRepo.delete(user.get());
+        } else {
+            throw new UserNotFoundException("User not found with id: " + id);
+        }
     }
 }
