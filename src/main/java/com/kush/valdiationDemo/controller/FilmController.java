@@ -22,6 +22,7 @@ public class FilmController {
         this.filmService = filmService;
     }
 
+
     @GetMapping("/films")
     public ResponseEntity<Map<String ,Object>> getAllFilms(){
         Map<String, Object> response = new HashMap<>();

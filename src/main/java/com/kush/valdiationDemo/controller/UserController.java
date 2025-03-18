@@ -24,6 +24,8 @@ public class UserController {
         this.userService = userService;
     }
 
+
+
     @GetMapping("/users")
     public ResponseEntity<Map<String ,Object>> getAllUsers(){
         Map<String , Object> response  = new HashMap<>();
@@ -63,7 +65,7 @@ public class UserController {
 
     @DeleteMapping("/user/delete/{id}")
     public ResponseEntity<Map<String , Object>> deleteUser(@PathVariable Long id){
-        Map<String , Object> response = new HashMap<>();
+       Map<String , Object> response = new HashMap<>();
         userService.deleteUser(id);
         response.put("returnCode", 200);
         response.put("ReturnObject", "User deleted successfully");
