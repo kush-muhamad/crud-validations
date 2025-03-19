@@ -7,6 +7,7 @@ import com.kush.valdiationDemo.repo.FilmRepo;
 import com.kush.valdiationDemo.repo.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,20 @@ public class FilmService {
 
     public List<Film>  getFilms() {
        return filmRepo.findAll();
+    }
+    public List<Film> getFilmsByPagination(int limit , int offset){
+        return filmRepo.findFilmsWithPagination(limit,offset);
+
+    }
+
+    public List<Film> sortFilm(String field  , String direction){
+        try {
+            Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+            return filmRepo.findAll(Sort.by(sortDirection, field));
+        } catch (Exception e) {
+            throw new NotFoundException(e.getMessage()) ;
+        }
+
     }
 
     public Film getFilmById(Long id) {
@@ -67,6 +82,7 @@ public class FilmService {
 
 
     }
+
 
     public Film deleteFilm(Long userId, Long filmId, @Valid Film film) {
         User user = userRepo.findById(userId)

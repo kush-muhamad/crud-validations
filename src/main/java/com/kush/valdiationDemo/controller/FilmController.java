@@ -23,14 +23,18 @@ public class FilmController {
     }
 
 
-    @GetMapping("/films")
-    public ResponseEntity<Map<String ,Object>> getAllFilms(){
-        Map<String, Object> response = new HashMap<>();
-        List <Film> films = filmService.getFilms();
-        response.put("returnCode", 200);
-        response.put("ReturnObject", films);
-        return new ResponseEntity<>(response, HttpStatus.OK);
 
+    @GetMapping("/films")
+    public ResponseEntity<Map<String, Object>> getFilms(
+            @RequestParam(defaultValue = "3") int limit,  // Default limit = 3
+            @RequestParam(defaultValue = "0") int offset  // Default offset = 0
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        List<Film> films = filmService.getFilmsByPagination(limit, offset);
+
+        response.put("returnCode", 200);
+        response.put("returnObject", films);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/film/{id}")
@@ -41,6 +45,19 @@ public class FilmController {
         response.put("ReturnObject", film);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @GetMapping("/films/sorted/{field}")
+    public ResponseEntity<Map<String, Object>> getSortedFilms(
+            @PathVariable String field,   // The field you want to sort by (e.g., "title", "director")
+            @RequestParam(defaultValue = "asc") String direction  // "asc" for ascending and "desc" for descending
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        List<Film> sortedFilms = filmService.sortFilm(field, direction);
+        response.put("returnCode", 200);
+        response.put("returnObject", sortedFilms);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 
     @PostMapping("/films/add/{user_id}")
     public ResponseEntity<Map<String , Object>> createFilm(@Valid @RequestBody Film film, @PathVariable Long user_id){
